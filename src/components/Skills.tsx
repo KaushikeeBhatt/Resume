@@ -177,9 +177,7 @@ const Skills: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             {[
               { label: 'CGPA', value: '8.28' },
-              { label: 'Projects Completed', value: '10+' },
-              { label: 'LeetCode Problems', value: '300+' },
-              { label: 'Active Users', value: '500+' }
+              
             ].map((stat, index) => (
               <div
                 key={stat.label}

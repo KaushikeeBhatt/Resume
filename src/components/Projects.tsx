@@ -22,9 +22,10 @@ const Projects: React.FC = () => {
       description: 'UI development for 200+ faculty members to communicate, post announcements, and share resources with real-time updates and optimized performance.',
       image: 'https://images.pexels.com/photos/3184306/pexels-photo-3184306.jpeg?auto=compress&cs=tinysrgb&w=800',
       technologies: ['React.js', 'CSS3', 'REST APIs', 'JavaScript'],
-      category: 'fullstack',
+      category: 'frontend',
       github: '#',
-      demo: '#',
+      demo: 'https://drive.google.com/file/d/11LGR_74VedpeCP6VDQQ1H7lQlZeNfGMQ/view?usp=drivesdk',
+      certificate: 'https://drive.google.com/file/d/119c0B55-OIyi-bYi6amHjkMTmL3S4Rfk/view?usp=drivesdk',
       features: ['200+ faculty users', 'Real-time updates', '50% load time reduction', 'Certificate awarded'],
     },
     {
@@ -32,7 +33,7 @@ const Projects: React.FC = () => {
       description: 'Interactive Power BI dashboard for visualizing healthcare metrics like admissions, diagnoses, billing, and bed occupancy with DAX-powered KPIs.',
       image: 'https://images.pexels.com/photos/4386466/pexels-photo-4386466.jpeg?auto=compress&cs=tinysrgb&w=800',
       technologies: ['Power BI', 'DAX', 'Data Modeling'],
-      category: 'ai',
+      category: 'data analysis',
       github: '#',
       demo: '#',
       features: [
@@ -47,7 +48,7 @@ const Projects: React.FC = () => {
       description: 'Dynamic Tableau dashboard built using multiple CSV datasets for analyzing trends in sales, profit, and quantity with interactive filters and KPI cards.',
       image: 'https://images.pexels.com/photos/669610/pexels-photo-669610.jpeg?auto=compress&cs=tinysrgb&w=800',
       technologies: ['Tableau', 'KPI Cards', 'Data Blending'],
-      category: 'ai',
+      category: 'data analysis',
       github: '#',
       demo: '#',
       features: [
@@ -62,7 +63,7 @@ const Projects: React.FC = () => {
       description: 'Organized and managed a 24-hour tech hackathon with 300+ participants, industry judges, and major sponsors including PepsiCo and Devfolio.',
       image: 'https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&w=800',
       technologies: ['Event Management', 'Project Coordination', 'Sponsorship', 'Team Leadership'],
-      category: 'frontend',
+      category: 'management',
       github: '#',
       demo: '#',
       features: ['300+ participants', 'Industry judges', 'Major sponsors', '24-hour duration'],
@@ -72,11 +73,9 @@ const Projects: React.FC = () => {
   const filters = [
     { id: 'all', label: 'All Projects' },
     { id: 'fullstack', label: 'Full Stack' },
-    { id: 'frontend', label: 'Frontend' },
-    { id: 'ai', label: 'AI/ML' },
-    { id: 'blockchain', label: 'Blockchain' },
-    { id: 'mobile', label: 'Mobile' },
-    { id: 'iot', label: 'IoT' },
+    { id: 'frontend', label: 'Frontend-UI/UX' },
+    { id: 'management', label: 'Management' },
+    { id: 'data analysis', label: 'Data Analysis' }
   ];
 
   useEffect(() => {
@@ -215,6 +214,19 @@ const Projects: React.FC = () => {
                       <Github className="w-4 h-4" />
                       Code
                     </a>
+                    {project.title === 'V-Echo & SCOPE-Connect - Faculty Portal' && (
+                      <div className="flex flex-col gap-1 ml-4">
+                        
+                        <a
+                          href={project.certificate}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 underline text-xs hover:text-blue-600"
+                        >
+                          [Certificate]
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -62,13 +62,13 @@ const Contact: React.FC = () => {
     {
       icon: <Phone className="w-5 h-5" />,
       label: 'Phone',
-      value: '+91 98765 43210',
-      href: 'tel:+919876543210'
+      value: '+91 9039517596',
+      href: 'tel:+919039517596'
     },
     {
       icon: <MapPin className="w-5 h-5" />,
       label: 'Location',
-      value: 'Vellore, Tamil Nadu',
+      value: 'Chennai, Tamil Nadu',
       href: '#'
     }
   ];
@@ -77,21 +77,16 @@ const Contact: React.FC = () => {
     {
       icon: <Github className="w-5 h-5" />,
       label: 'GitHub',
-      href: 'https://github.com',
+      href: 'https://github.com/KaushikeeBhatt',
       color: 'hover:text-gray-400'
     },
     {
       icon: <Linkedin className="w-5 h-5" />,
       label: 'LinkedIn',
-      href: 'https://linkedin.com',
+      href: 'https://www.linkedin.com/in/kaushikee-bhatt-bb4687228/ ',
       color: 'hover:text-blue-400'
-    },
-    {
-      icon: <Twitter className="w-5 h-5" />,
-      label: 'Twitter',
-      href: 'https://twitter.com',
-      color: 'hover:text-sky-400'
     }
+   
   ];
 
   return (
@@ -180,7 +175,7 @@ const Contact: React.FC = () => {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 bg-charcoal/50 backdrop-blur-sm border border-orchid-light/20 rounded-xl text-ivory placeholder-gray-400 focus:border-orchid-light focus:outline-none focus:ring-2 focus:ring-orchid-light/20 transition-all duration-300"
-                      placeholder="John Doe"
+                      placeholder="Full Name"
                     />
                   </div>
 
@@ -196,7 +191,7 @@ const Contact: React.FC = () => {
                       onChange={handleInputChange}
                       required
                       className="w-full px-4 py-3 bg-charcoal/50 backdrop-blur-sm border border-orchid-light/20 rounded-xl text-ivory placeholder-gray-400 focus:border-orchid-light focus:outline-none focus:ring-2 focus:ring-orchid-light/20 transition-all duration-300"
-                      placeholder="john@example.com"
+                      placeholder="abc@example.com"
                     />
                   </div>
                 </div>

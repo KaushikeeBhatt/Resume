@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { Heart, Code, Palette, Zap } from 'lucide-react';
-
+import photo from '../assets/IMG_7227.JPG';
 const About: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -65,7 +65,12 @@ const About: React.FC = () => {
               <div className="relative">
                 <div className="w-80 h-80 mx-auto bg-gradient-to-br from-orchid-primary/20 to-fuchsia/20 rounded-full backdrop-blur-sm border border-orchid-light/30 flex items-center justify-center group hover:scale-105 transition-transform duration-500">
                   <div className="w-72 h-72 bg-gradient-to-br from-charcoal to-charcoal-light rounded-full flex items-center justify-center text-orchid-light text-8xl font-light group-hover:text-fuchsia transition-colors duration-300">
-                    JS
+                  <img
+                    src={photo}
+                    alt="Kaushikee"
+                    className="w-full h-full object-cover rounded-full shadow-md transition-transform duration-300"
+                  />
+
                   </div>
                 </div>
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-fuchsia to-orchid-primary rounded-full animate-float opacity-80" />
