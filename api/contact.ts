@@ -55,8 +55,8 @@ function validateInput(data: ContactFormData): { isValid: boolean; errors: strin
     errors.push('Subject must be at least 5 characters long');
   }
 
-  if (!data.message || data.message.trim().length < 10) {
-    errors.push('Message must be at least 10 characters long');
+  if (!data.message || data.message.trim().length < 5) {
+    errors.push('Message must be at least 5 characters long');
   }
 
   return { isValid: errors.length === 0, errors };
