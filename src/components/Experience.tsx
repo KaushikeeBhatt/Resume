@@ -147,7 +147,7 @@ const Experience: React.FC = () => {
 
           <div className="text-center mt-12 animate-on-scroll">
             <button className="px-8 py-4 bg-gradient-to-r from-orchid-primary to-fuchsia rounded-full text-ivory font-semibold hover:shadow-2xl hover:shadow-fuchsia/50 transform hover:scale-105 transition-all duration-300">
-              Download Resume
+             <a href="https://drive.usercontent.google.com/uc?id=1aeObeZbNYfvwROYNux-cCXhFq1t8kkdx&export=download" download>Download Resume</a> 
             </button>
           </div>
         </div>
