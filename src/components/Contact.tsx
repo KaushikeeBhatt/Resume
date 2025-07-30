@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, CheckCircle } from 'lucide-react';
 
 const Contact: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -41,15 +41,32 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-    // Reset success message after 3 seconds
-    setTimeout(() => setIsSubmitted(false), 3000);
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        // Reset success message after 5 seconds
+        setTimeout(() => setIsSubmitted(false), 5000);
+      } else {
+        // Handle error
+        alert(data.error || 'Failed to send message. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Network error. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
