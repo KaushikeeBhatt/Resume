@@ -1,0 +1,11 @@
+server.js
+node_modules
+.env.local
+.env.development
+.env.development.local
+.env.production.local
+dist-ssr
+*.local
+.DS_Store
+.vscode
+.idea

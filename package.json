@@ -9,8 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "node server.js",
-    "start": "concurrently \"npm run server\" \"npm run dev\"",
-    "vercel-build": "npm run build"
+    "start": "concurrently \"npm run server\" \"npm run dev\""
   },
   "dependencies": {
     "@vercel/node": "^3.2.29",
