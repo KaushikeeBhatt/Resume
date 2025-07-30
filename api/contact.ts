@@ -51,12 +51,12 @@ function validateInput(data: ContactFormData): { isValid: boolean; errors: strin
     errors.push('Please provide a valid email address');
   }
 
-  if (!data.subject || data.subject.trim().length < 4 ) {
-    errors.push('Subject must be at least 5 characters long');
+  if (!data.subject || data.subject.trim().length < 2 ) {
+    errors.push('Subject must be at least 2 characters long');
   }
 
-  if (!data.message || data.message.trim().length < 10) {
-    errors.push('Message must be at least 10 characters long');
+  if (!data.message || data.message.trim().length < 1) {
+    errors.push('Message must be at least 1 characters long');
   }
 
   return { isValid: errors.length === 0, errors };
