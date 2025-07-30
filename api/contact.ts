@@ -51,7 +51,7 @@ function validateInput(data: ContactFormData): { isValid: boolean; errors: strin
     errors.push('Please provide a valid email address');
   }
 
-  if (!data.subject || data.subject.trim().length < 5) {
+  if (!data.subject || data.subject.trim().length < 4 ) {
     errors.push('Subject must be at least 5 characters long');
   }
 
@@ -63,6 +63,8 @@ function validateInput(data: ContactFormData): { isValid: boolean; errors: strin
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  console.log('Contact API called:', req.method, req.url);
+  
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -109,7 +111,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Create transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
@@ -199,6 +201,15 @@ Kaushikee Bhatt
 
   } catch (error) {
     console.error('Email sending error:', error);
+    
+    // Check if environment variables are missing
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Missing environment variables: EMAIL_USER or EMAIL_PASS');
+      return res.status(500).json({ 
+        error: 'Server configuration error. Please contact the administrator.' 
+      });
+    }
+    
     res.status(500).json({ 
       error: 'Failed to send message. Please try again later.' 
     });
