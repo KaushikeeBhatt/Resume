@@ -14,10 +14,10 @@ A modern, responsive portfolio website built with React, TypeScript, and Tailwin
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Vercel Serverless Functions
+- **Backend**: Express.js server
 - **Email**: Nodemailer with Gmail SMTP
 - **Build Tool**: Vite
-- **Deployment**: Vercel
+- **Development**: Concurrent servers with proxy
 
 ## Setup Instructions
 

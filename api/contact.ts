@@ -1,11 +1,11 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { VercelRequest, VercelResponse } from '@vercel/node';
 import nodemailer from 'nodemailer';
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
 const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per 15 minutes
 
-// In-memory store for rate limiting (in production, use Redis or similar)
+// In-memory store for rate limiting (in production, consider using Redis)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 // Rate limiting middleware
@@ -14,13 +14,12 @@ function rateLimit(ip: string): boolean {
   const record = rateLimitStore.get(ip);
 
   if (!record || now > record.resetTime) {
-    // First request or window expired
     rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
     return true;
   }
 
   if (record.count >= MAX_REQUESTS_PER_WINDOW) {
-    return false; // Rate limit exceeded
+    return false;
   }
 
   record.count++;
@@ -34,7 +33,14 @@ function isValidEmail(email: string): boolean {
 }
 
 // Input validation
-function validateInput(data: any): { isValid: boolean; errors: string[] } {
+interface ContactFormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+function validateInput(data: ContactFormData): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
   if (!data.name || data.name.trim().length < 2) {
@@ -56,7 +62,22 @@ function validateInput(data: any): { isValid: boolean; errors: string[] } {
   return { isValid: errors.length === 0, errors };
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  // Handle OPTIONS request
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -64,8 +85,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Get client IP for rate limiting
-    const clientIP = req.headers['x-forwarded-for'] as string || 
-                    req.connection.remoteAddress || 
+    const clientIP = (req.headers['x-forwarded-for'] as string) || 
+                    (req.headers['x-real-ip'] as string) ||
                     'unknown';
 
     // Check rate limit
@@ -88,18 +109,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Create transporter
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS // Use app password for Gmail
+        pass: process.env.EMAIL_PASS
       },
     });
 
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // Send to yourself
+      to: process.env.EMAIL_USER,
       replyTo: email,
       subject: `Portfolio Contact: ${subject}`,
       html: `
@@ -182,4 +203,4 @@ Kaushikee Bhatt
       error: 'Failed to send message. Please try again later.' 
     });
   }
-} 
+}
