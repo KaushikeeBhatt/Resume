@@ -110,13 +110,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Create transporter
+    // Create transporter with more robust configuration
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     // Email content
@@ -157,8 +162,16 @@ This message was sent from your portfolio contact form.
       `
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    // Send email using Promise-based approach for better error handling
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve('Email sent!');
+        } else {
+          reject(err);
+        }
+      });
+    });
 
     // Send confirmation email to user
     const confirmationMailOptions = {
@@ -192,7 +205,15 @@ Kaushikee Bhatt
       `
     };
 
-    await transporter.sendMail(confirmationMailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(confirmationMailOptions, function (err) {
+        if (!err) {
+          resolve('Confirmation email sent!');
+        } else {
+          reject(err);
+        }
+      });
+    });
 
     res.status(200).json({ 
       success: true, 
