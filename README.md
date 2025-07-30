@@ -1,190 +1,289 @@
-# Portfolio Website with SMTP Contact Form
+# Kaushikee Bhatt - Portfolio Website
 
-A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS, featuring a functional contact form with SMTP email integration.
+A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS, featuring a sleek design, interactive components, and a fully functional contact form with SMTP email integration.
 
-## Features
+## ✨ Features
 
-- 🎨 Modern, responsive design with dark theme
-- 📧 Functional contact form with SMTP email sending
-- 🚀 Rate limiting to prevent spam and abuse
-- 📱 Mobile-first responsive design
-- ⚡ Fast loading with Vite
-- 🔒 Input validation and security measures
+- 🎨 **Modern Design** - Clean, professional layout with dark theme
+- 📱 **Responsive** - Mobile-first design that works on all devices
+- ⚡ **Fast Performance** - Built with Vite for lightning-fast loading
+- 📧 **Contact Form** - Functional contact form with email notifications
+- 🚀 **Rate Limiting** - Built-in protection against spam and abuse
+- 🔒 **Security** - Input validation and XSS protection
+- 💼 **Professional Sections** - Hero, About, Experience, Projects, Skills, Contact
+- 🎯 **TypeScript** - Type-safe development experience
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: React 18, TypeScript, Tailwind CSS
-- **Backend**: Express.js server
-- **Email**: Nodemailer with Gmail SMTP
-- **Build Tool**: Vite
-- **Development**: Concurrent servers with proxy
+### Frontend
+- **React 18** - Modern React with hooks
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Vite** - Fast build tool and development server
 
-## Setup Instructions
+### Backend
+- **Express.js** - Lightweight Node.js server
+- **Nodemailer** - Email sending functionality
+- **CORS** - Cross-origin resource sharing
+- **Rate Limiting** - Request throttling middleware
 
-### 1. Clone and Install Dependencies
+### Deployment
+- **Vercel** - Serverless deployment platform
+- **Gmail SMTP** - Email service integration
 
-```bash
-git clone <your-repo-url>
-cd project
-npm install
-```
+## 🚀 Quick Start
 
-### 2. Email Configuration
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+- Gmail account with 2FA enabled
 
-#### Option A: Gmail SMTP (Recommended)
+### Installation
 
-1. **Enable 2-Factor Authentication** on your Google Account
-2. **Generate App Password**:
-   - Go to Google Account Settings
-   - Security → App passwords
-   - Select "Mail" and generate password
-3. **Set Environment Variables**:
-   - Copy `env.example` to `.env.local`
-   - Update with your Gmail credentials:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/KaushikeeBhatt/Resume
+   cd Resume
    ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Update `.env.local` with your credentials:
+   ```env
    EMAIL_USER=your-email@gmail.com
    EMAIL_PASS=your-app-password-here
    ```
 
-#### Option B: Other SMTP Providers
+4. **Start development server**
+   ```bash
+   npm run dev
+   ```
 
-Update the transporter configuration in `pages/api/contact.ts`:
+5. **Open your browser**
+   Navigate to `http://localhost:5173`
+
+## 📧 Email Configuration
+
+### Gmail Setup (Recommended)
+
+1. **Enable 2-Factor Authentication**
+   - Go to your Google Account settings
+   - Navigate to Security → 2-Step Verification
+   - Enable 2FA if not already enabled
+
+2. **Generate App Password**
+   - Go to Security → App passwords
+   - Select "Mail" as the app
+   - Generate and copy the 16-character password
+
+3. **Update Environment Variables**
+   ```env
+   EMAIL_USER=your-gmail@gmail.com
+   EMAIL_PASS=your-16-char-app-password
+   ```
+
+### Custom SMTP Provider
+
+To use a different email provider, update the transporter configuration in `pages/api/contact.ts`:
 
 ```typescript
 const transporter = nodemailer.createTransporter({
-  host: 'your-smtp-host',
+  host: 'your-smtp-host.com',
   port: 587,
-  secure: false,
+  secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
+  }
 });
 ```
 
-### 3. Development
+## 🌐 Deployment
 
-```bash
-npm run dev
-```
+### Deploy to Vercel
 
-Visit `http://localhost:5173` to see your portfolio.
-
-### 4. Deploy to Vercel
-
-1. **Install Vercel CLI**:
+1. **Install Vercel CLI**
    ```bash
    npm i -g vercel
    ```
 
-2. **Deploy**:
+2. **Deploy**
    ```bash
    vercel
    ```
 
-3. **Set Environment Variables in Vercel**:
+3. **Set Environment Variables**
    - Go to your Vercel dashboard
    - Select your project
-   - Go to Settings → Environment Variables
+   - Navigate to Settings → Environment Variables
    - Add `EMAIL_USER` and `EMAIL_PASS`
 
-4. **Redeploy**:
+4. **Redeploy with production settings**
    ```bash
    vercel --prod
    ```
 
-## Rate Limiting
+### Other Platforms
 
-The contact form includes rate limiting to prevent abuse:
-- **5 requests per 15 minutes** per IP address
-- Returns HTTP 429 (Too Many Requests) when exceeded
-- Includes `Retry-After` header with wait time
+The project can be deployed to any platform that supports Node.js:
+- Netlify
+- Railway
+- Heroku
+- DigitalOcean App Platform
 
-## Security Features
+## 🔧 Customization
 
-- ✅ Input validation (name, email, subject, message)
-- ✅ Email format validation
-- ✅ Rate limiting per IP
-- ✅ CORS protection
-- ✅ XSS prevention
-- ✅ SQL injection prevention (no database)
+### Content Updates
 
-## Customization
+Update the following components to customize your portfolio:
 
-### Update Personal Information
-
-Edit the following files:
-- `src/components/Hero.tsx` - Main hero section
-- `src/components/About.tsx` - About section
-- `src/components/Experience.tsx` - Work experience
-- `src/components/Projects.tsx` - Project showcase
-- `src/components/Skills.tsx` - Skills section
-- `src/components/Contact.tsx` - Contact information
+- **`src/components/Hero.tsx`** - Main hero section with introduction
+- **`src/components/About.tsx`** - About section with personal information
+- **`src/components/Experience.tsx`** - Work experience and career history
+- **`src/components/Projects.tsx`** - Project showcase with descriptions
+- **`src/components/Skills.tsx`** - Technical skills and competencies
+- **`src/components/Contact.tsx`** - Contact information and social links
 
 ### Styling
 
-The project uses Tailwind CSS with custom colors defined in `tailwind.config.js`:
-- `orchid-primary` - Primary brand color
-- `orchid-light` - Light accent color
-- `fuchsia` - Secondary accent color
-- `charcoal` - Dark background
-- `ivory` - Light text
+The project uses a custom color palette defined in `tailwind.config.js`:
 
-## Troubleshooting
+```javascript
+colors: {
+  'orchid-primary': '#DA70D6',
+  'orchid-light': '#E6A8E6',
+  'fuchsia': '#FF1493',
+  'charcoal': '#2F2F2F',
+  'ivory': '#FFFFF0'
+}
+```
 
-### Email Not Sending
+### Adding New Sections
 
-1. **Check Environment Variables**: Ensure `EMAIL_USER` and `EMAIL_PASS` are set correctly
-2. **Gmail App Password**: Make sure you're using an app password, not your regular password
-3. **2FA Enabled**: Gmail requires 2-factor authentication for app passwords
-4. **Vercel Environment Variables**: Ensure they're set in your Vercel dashboard
+1. Create a new component in `src/components/`
+2. Import and add it to `src/App.tsx`
+3. Update navigation if needed
 
-### Rate Limiting Issues
-
-- The rate limit is 5 requests per 15 minutes per IP
-- Wait for the time window to reset or use a different IP
-- Check the response headers for `Retry-After` information
-
-### Build Errors
-
-1. **TypeScript Errors**: Run `npm run lint` to check for issues
-2. **Missing Dependencies**: Ensure all packages are installed with `npm install`
-3. **Vercel Build**: Check Vercel build logs for specific errors
-
-## File Structure
+## 📁 Project Structure
 
 ```
-project/
+kaushikeebhatt_Resume/
 ├── src/
 │   ├── components/          # React components
+│   │   ├── Hero.tsx
+│   │   ├── About.tsx
+│   │   ├── Experience.tsx
+│   │   ├── Projects.tsx
+│   │   ├── Skills.tsx
+│   │   └── Contact.tsx
 │   ├── hooks/              # Custom React hooks
 │   ├── assets/             # Images and static files
-│   ├── App.tsx             # Main app component
-│   └── main.tsx            # Entry point
+│   ├── App.tsx             # Main application component
+│   └── main.tsx            # Application entry point
 ├── pages/
 │   └── api/
 │       └── contact.ts      # Email API endpoint
-├── public/                 # Static files
-├── vercel.json            # Vercel configuration
-├── tailwind.config.js     # Tailwind configuration
-└── package.json           # Dependencies and scripts
+├── public/                 # Static assets
+├── .env.example            # Environment variables template
+├── vercel.json             # Vercel deployment configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+├── vite.config.ts          # Vite build configuration
+└── package.json            # Project dependencies
 ```
 
-## Contributing
+## 🛡️ Security Features
+
+- **Rate Limiting** - 5 requests per 15 minutes per IP address
+- **Input Validation** - Server-side validation for all form fields
+- **XSS Prevention** - Content sanitization
+- **CORS Protection** - Configured cross-origin policies
+- **Environment Variables** - Sensitive data protection
+
+## 🔍 Troubleshooting
+
+### Email Not Sending
+
+1. **Check Environment Variables**
+   - Verify `EMAIL_USER` and `EMAIL_PASS` are correctly set
+   - Ensure no extra spaces or characters
+
+2. **Gmail Issues**
+   - Confirm 2FA is enabled on your Google account
+   - Use app password, not regular account password
+   - Check if "Less secure app access" is disabled (should be)
+
+3. **Vercel Deployment**
+   - Verify environment variables are set in Vercel dashboard
+   - Check Vercel function logs for errors
+
+### Rate Limiting Issues
+
+- **Error 429**: Wait 15 minutes or use different IP
+- **Check Headers**: Look for `Retry-After` header for wait time
+- **Testing**: Use different devices/networks for testing
+
+### Build Errors
+
+1. **TypeScript Errors**
+   ```bash
+   npm run lint
+   ```
+
+2. **Missing Dependencies**
+   ```bash
+   npm install
+   rm -rf node_modules package-lock.json
+   npm install
+   ```
+
+3. **Vercel Build Issues**
+   - Check build logs in Vercel dashboard
+   - Verify all environment variables are set
+
+## 📝 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run type-check` - Run TypeScript compiler
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Support
+## 📞 Support
 
 If you encounter any issues or have questions:
+
 1. Check the troubleshooting section above
-2. Review the Vercel deployment logs
-3. Open an issue on GitHub with detailed information 
+2. Review the [GitHub Issues](https://github.com/KaushikeeBhatt/Resume/issues)
+3. Create a new issue with detailed information about your problem
+
+## 🌟 Acknowledgments
+
+- Built with [React](https://reactjs.org/)
+- Styled with [Tailwind CSS](https://tailwindcss.com/)
+- Deployed on [Vercel](https://vercel.com/)
+- Email service by [Nodemailer](https://nodemailer.com/)
+
+---
+
+**Made with ❤️ by [Kaushikee Bhatt & Puneet Chandna](https://github.com/KaushikeeBhatt/Resume)**
