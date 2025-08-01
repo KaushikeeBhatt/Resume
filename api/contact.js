@@ -1,15 +1,14 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import nodemailer from 'nodemailer';
+const nodemailer = require('nodemailer');
 
 // Rate limiting configuration
 const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
 const MAX_REQUESTS_PER_WINDOW = 5; // 5 requests per 15 minutes
 
 // In-memory store for rate limiting (in production, consider using Redis)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+const rateLimitStore = new Map();
 
 // Rate limiting middleware
-function rateLimit(ip: string): boolean {
+function rateLimit(ip) {
   const now = Date.now();
   const record = rateLimitStore.get(ip);
 
@@ -27,21 +26,14 @@ function rateLimit(ip: string): boolean {
 }
 
 // Email validation
-function isValidEmail(email: string): boolean {
+function isValidEmail(email) {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
 // Input validation
-interface ContactFormData {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}
-
-function validateInput(data: ContactFormData): { isValid: boolean; errors: string[] } {
-  const errors: string[] = [];
+function validateInput(data) {
+  const errors = [];
 
   if (!data.name || data.name.trim().length < 2) {
     errors.push('Name must be at least 2 characters long');
@@ -51,18 +43,20 @@ function validateInput(data: ContactFormData): { isValid: boolean; errors: strin
     errors.push('Please provide a valid email address');
   }
 
-  if (!data.subject || data.subject.trim().length < 5) {
-    errors.push('Subject must be at least 5 characters long');
+  if (!data.subject || data.subject.trim().length < 2) {
+    errors.push('Subject must be at least 2 characters long');
   }
 
-  if (!data.message || data.message.trim().length < 10) {
-    errors.push('Message must be at least 10 characters long');
+  if (!data.message || data.message.trim().length < 1) {
+    errors.push('Message must be at least 1 characters long');
   }
 
   return { isValid: errors.length === 0, errors };
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async (req, res) => {
+  console.log('Contact API called:', req.method, req.url);
+  
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -85,8 +79,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     // Get client IP for rate limiting
-    const clientIP = (req.headers['x-forwarded-for'] as string) || 
-                    (req.headers['x-real-ip'] as string) ||
+    const clientIP = req.headers['x-forwarded-for'] || 
+                    req.headers['x-real-ip'] ||
                     'unknown';
 
     // Check rate limit
@@ -108,13 +102,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       });
     }
 
-    // Create transporter
+    // Check if environment variables are missing
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Missing environment variables: EMAIL_USER or EMAIL_PASS');
+      return res.status(500).json({ 
+        error: 'Server configuration error. Please contact the administrator.' 
+      });
+    }
+
+    // Create transporter with more robust configuration
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     // Email content
@@ -155,8 +162,16 @@ This message was sent from your portfolio contact form.
       `
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+    // Send email using Promise-based approach for better error handling
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, function (err) {
+        if (!err) {
+          resolve('Email sent!');
+        } else {
+          reject(err);
+        }
+      });
+    });
 
     // Send confirmation email to user
     const confirmationMailOptions = {
@@ -190,7 +205,15 @@ Kaushikee Bhatt
       `
     };
 
-    await transporter.sendMail(confirmationMailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(confirmationMailOptions, function (err) {
+        if (!err) {
+          resolve('Confirmation email sent!');
+        } else {
+          reject(err);
+        }
+      });
+    });
 
     res.status(200).json({ 
       success: true, 
@@ -199,8 +222,17 @@ Kaushikee Bhatt
 
   } catch (error) {
     console.error('Email sending error:', error);
+    
+    // Check if environment variables are missing
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('Missing environment variables: EMAIL_USER or EMAIL_PASS');
+      return res.status(500).json({ 
+        error: 'Server configuration error. Please contact the administrator.' 
+      });
+    }
+    
     res.status(500).json({ 
       error: 'Failed to send message. Please try again later.' 
     });
   }
-}
+}; 
